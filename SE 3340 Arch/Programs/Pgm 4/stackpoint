@@ -1,0 +1,115 @@
+#####################################
+# Pgm 4
+#
+# University of Texas at Dallas
+# CS/CE 3340
+# Fall 2016
+#
+# Alex Lundin
+#
+# Description of file content - 
+# this program askes user for the number of pairs to multiply then accumulate at the end.
+# after the total number of pairs is entered, the user must enter each number for the set of pairs.
+# these pairs are stored onto the stack, in two seperate arrays starting at different addresses.
+# the program pulls each item back off the stack during the multiply loop.
+# finally the program outputs the accumulated value.
+#
+# List of routines
+#
+######################################
+
+######################################
+# main
+#
+# Output - 
+# nothing
+#
+# Variable descriptions - 
+# $t2 holds number of pairs, this is used for the loop max value
+# $t4 holds the size of each array in bytes
+# $s4 and $s5 hold the addresses for each array
+#
+# L1
+# first loop, retrun to main (stored in $ra) after loop completes
+# Output - 
+# accumulated values stored in $s3
+#
+# Variable descriptions -
+# $t1 is loop counter
+# $t2 is loop max value
+# $s0 and $s1 store the pair of numbers entered each iteration and are stored to the stack
+# $t4 holds the size of each array in bytes
+# $s4 and $s5 hold the addresses for each array
+#
+# SUMPRODUCT
+#
+# Output - 
+# accumulated values stored in $s3
+#
+# Variable descriptions -
+# $t5 is loop counter
+# $t2 is loop max value
+# $s0 and $s1 store the pair of numbers pulled off the stack
+# $s2 holds the multiplication of the pairs, no overflow handling
+# $s3 holds the accumulation of the multiplied pairs
+#
+# read
+#
+# Output -
+# nothing
+#
+# Variable descriptions -
+# $v0 holds number of pairs entered by user
+#
+# EXIT
+#
+# Output -
+# informationg about the programs calculations and the final accumulated value
+#
+# Variable descriptions -
+#
+######################################
+
+      .data
+start: .asciiz  "in main"
+nested1: .asciiz  "in nested1"
+nested2: .asciiz  "in nested2"
+
+      .text
+main:
+
+	la   $a0, start        		# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+      	syscall               		# print heading
+      	
+   	addiu $sp, $sp, -8  		# allocate 2 words on the stack
+	
+	jal N1             		# this overwrites $ra
+	
+	addiu $sp, $sp, 8   		# restore $sp, freeing the allocated space
+	
+	la   $a0, start        		# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+      	syscall               		# print heading	   	
+      	j EXIT
+N1:
+	la   $a0, nested1       	# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+      	syscall               		# print heading
+	sw $ra, 4($sp)      		# save $ra in the upper one
+	jal N2
+N2:
+	la   $a0, nested2       	# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+      	syscall               		# print heading
+
+	lw $ra, 4($sp)      		# reload $ra so we can return to caller
+	jr $ra              		# return
+	
+EXIT:
+
+
+	li      $v0, 10              	# terminate program run
+    	syscall 
+    	
+

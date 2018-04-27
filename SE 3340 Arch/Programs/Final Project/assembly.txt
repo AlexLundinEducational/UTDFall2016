@@ -1,0 +1,6 @@
+lui $at, $zero, 4097
+ori $a0, $at, 0
+addiu $v0, $zero, 4
+syscall $zero, $zero, $zero
+addiu $v0, $zero, 1097
+syscall $zero, $zero, $zero

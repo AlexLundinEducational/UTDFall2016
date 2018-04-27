@@ -1,0 +1,57 @@
+Alex Lundin
+Homework 1
+08/31/2016
+
+
+1.1
+	Personal Computers (PCs)
+		- good performance to single user
+		- low cost
+		- use third party Software
+		
+	Servers
+		- acessed via Network
+		- carry large loads
+		- wide range of cost and capability
+		
+	Supercomputers
+		- tens of thousands of processors
+		- usually terabytes of memory
+		
+	Embedded Computers
+		- largest class of computers
+		- microprocessors in cars, TV sets and airplanes
+		
+1.3
+	The developers use a high level language to program. Then the compiler turns this source code into assembly language. 
+	Next, the assembler takes the assembly language and transforms this into a binary machine language program.
+	
+1.4
+	8 bits for each of the three colors, so 24 bits per pixel or 3 bytes
+	
+	frame size of 1280 X 1024 times 3 bytes per pixel
+	3,932,160 Bytes
+	
+	time = frame buffer / network rate
+	time = 3.932 Mbits / 100 Mbits per second 
+	time = .039 seconds
+	
+1.5
+	a) 	CPU time = (instruction count * CPI) / clock rate 
+		P1 = 3 GHz / 1.5 = 2
+		P2 = 2.5 GHz / 1.0 = 2.5
+		P3 = 4.0 GHz / 2.2 = 1.81 fastest
+		
+	b)	clock cycles = CPU time * clock rate
+		P1 = 10 s * 3 GHz = 30 * 10^9 cycles
+		P2 = 10 s * 2.5 GHz = 25 * 10^9 cycles
+		P3 = 10 s * 4.0 GHz = 40 * 10^9 cycles
+		
+		CPU clock cycles / CPI = Instructions
+		P1 = 3.0 * 10^9 cycles / 1.5
+		P2 = 2.5 * 10^9 cycles / 1.0
+		P3 = 4.0 * 10^9 cycles / 2.2
+		
+	c) 
+		Execution time and CPI are inversely related, so changing on effects the other.
+		We should use a longer clock rate so the overall run time goes down.

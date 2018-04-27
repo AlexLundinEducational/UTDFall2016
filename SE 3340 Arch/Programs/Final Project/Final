@@ -1,0 +1,2729 @@
+###########################################################################################################################################
+# Final
+#
+# University of Texas at Dallas
+# CS/CE 3340
+# Fall 2016
+#
+# Alex Lundin
+#
+###########################################################################################################################################
+
+###########################################################################################################################################
+# main
+# outputs 
+# allinstruction buffer with entire text file data
+###########################################################################################################################################
+# allinstructionsetup
+# outputs 
+# s0 allinstructions saved at start
+# s1 allinstructions for looping through
+# s2 set to 0
+###########################################################################################################################################
+# currentinstructionsetup
+# registers
+# t2 - counter (0)
+# t4 - location of buffer to put characters into which is instruction
+# t5 - counter max (32)
+# s1 - allinstructions buffer for looping, incremented on every get loop.
+#      and then incremented by two after every instruction to account for new line
+# outputs
+# none
+###########################################################################################################################################
+# getinstruction
+# t2 - counter incremented on loop
+# t4 - location of buffer to put characters into which is instruction, incremented on loop
+# t5 - counter max (32)
+# s1 - allinstructions buffer for looping, incremented on loop
+# outputs
+# instruction buffer loaded with current instruction
+###########################################################################################################################################
+###########################################################################################################################################
+## this program uses several setup and get routines and they use the same register convenvtion ############################################
+########################## below shows a generic example ##################################################################################
+###########################################################################################################################################
+# xxxxxxsetup
+# t2 - counter (0)
+# t4 - location of buffer to put characters
+# t5 - counter max (32)
+# s1 - allinstructions buffer for looping, incremented on every get loop.
+###########################################################################################################################################
+# getxxxxxxx
+# t2 - counter incremented on loop
+# t4 - location of buffer to put characters into which is instruction, incremented on loop
+# t5 - counter max (32)
+# s1 - allinstructions buffer for looping, incremented on loop
+# outputs
+# buffer loaded with corresponding part of the instruction
+###########################################################################################################################################    	 	    	    	 	    	    	 	    	    	 	    	    	     	 	    	    	 	    	    	 	    	    	 	    	    	    	  	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	     	 	    	    	 	    	    	 	    	    	 	    	    	     	 	    	    	 	    	    	 	    	    	 	    	    	    	  	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	
+# endgetters: 
+# s2 - loaded with value 2, to jump past the new line character in the allinstructions buffer for looping
+# t1 - address of opcode buffer
+# outputs
+# t7 - converted opcode string to integer value for computedgoto
+#      handled by subfunction binarytodecimal	      	      	      	    
+###########################################################################################################################################	      	      	      	      	      	    	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	     	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	       
+# computedgoto -- structure to handle opcodes for any instruction
+#
+# prologue
+# arguments:
+#   t7 -- decimal conversion of opcode code
+#
+# epilogue
+# either writes opcode, or jumps to the specific instruction type label
+###########################################################################################################################################
+# rtype
+#	 - holds several labels for rtype opcodes
+# rwrite
+#	 - gets remaining function value stored to function buffer
+#	 - uses binarytodecimal to convert function string to integer stored to t7
+#    	 - uses computedgoto3 on value in t7, which is function as integer, to locate correct string and write function to text file
+#	 - returns from computedgoto3
+#	 - uses binarytodecimal to convert rs, rt and rd strings (one at a time) to integer stored to t7
+#	 - uses computedgoto2 on all three (one at a time) to locate correct register strings
+#	 - returns from computedgoto2 (one at a time)
+#        - uses fputs on the value of a1 set by computedgoto2 to write to text file (one at a time)
+#	 - jump to exitwriters
+###########################################################################################################################################
+# itype  
+#	 - holds several labels for itype opcodes
+# iwrite
+#	 - opcode is already written to text file 
+#	 - gets remaining immediate value stored to immediate buffer
+#	 - uses binarytodecimal to convert rs and rt strings (one at a time) to integer stored to t7
+#	 - uses computedgoto2 on value in t7, which is rs or rt as integer, to locate correct string and store to a1 for fputs prologue
+#	 - returns from computedgoto2
+#        - uses fputs on the value of a1 set by computedgoto2 to write to text file
+#	 - uses binarytodecimal to convert immediate binary string to integer in t7
+#	 - uses itoa to convert immediate integer to string in intofinal buffer
+#	 - uses the fputs to output intofinal buffer
+#        - uses itoaclear to reset buffer for next use
+###########################################################################################################################################
+# jtype
+#	 - holds several labels for jtype opcodes
+# jwrite 
+#	 - opcode is already written to text file 
+#	 - gets remaining pseudoaddress value stored to buffer
+#	 - write pseudoaddress as string of binary # with fputs
+###########################################################################################################################################
+# exitwriters
+#	 - loop back to currentinstructionsetup
+# outputs
+# none
+###########################################################################################################################################
+# computedgoto2 -- structure to get the string the corresponds to the converted register value
+#
+# prologue
+# arguments:
+#   t7 -- decimal conversion of register 
+###########################################################################################################################################
+# computedgoto3 -- structure to write function code
+#
+# prologue
+# arguments:
+#   t7 -- decimal conversion of function code
+###########################################################################################################################################
+# owrite -- Open (for writing) a file that exists
+#
+# prologue to oclose
+# nothing needed, output file is coded into this
+###########################################################################################################################################
+# oclose -- close any output file
+#
+# prologue to oclose
+# arguments:
+#   must be set during prologue to function
+#   s6 -- file descriptor  
+###########################################################################################################################################
+# fputs -- output string to file
+#
+# prologue to fputs
+# arguments:
+#   must be set during prologue to function
+#   a1 -- buffer address
+#   s6 -- file descriptor
+#
+# registers:
+#   handled by fputs_loop
+#   t0 -- current buffer char
+#   a2 -- buffer length
+###########################################################################################################################################
+# itoa -- convert integer to string with ASCII values
+#
+# prologue to itoa
+# arguments:
+#   must be set during prologue to function
+#   t7 -- convert, works well with binarytodecimal
+#
+# output:
+#   handled by itoa
+#   itoafinal -- converted string
+###########################################################################################################################################
+# binarytodecimal -- convert binary string of 0's and 1's to decimal integer
+#
+# prologue to itoa
+# arguments:
+#   must be set during prologue to function
+#   t1 -- address of binary string to convert
+#
+# output:
+#   t7 -- converted decimal integer
+# epilogue
+#   there are print drivers still intact at the end for testing.
+#   they are commented out right now though.
+
+
+
+	.data 
+opcode0_string:
+	.asciiz "r type"
+opcode1_string:
+	.asciiz "invalid"
+opcode2_string:
+	.asciiz "j"
+opcode3_string:
+        .asciiz "jal"
+opcode4_string:
+        .asciiz "beq"
+opcode5_string:
+        .asciiz "bne"
+opcode6_string:
+        .asciiz "blez"
+opcode7_string:
+        .asciiz "bgtz"
+opcode8_string:
+        .asciiz "addi"
+opcode9_string:
+        .asciiz "addiu"
+opcode10_string:
+        .asciiz "slti"
+opcode11_string:
+        .asciiz "sltiu"
+opcode12_string:
+        .asciiz "andi"
+opcode13_string:
+        .asciiz "ori"
+opcode14_string:
+        .asciiz "xori"
+opcode15_string:
+        .asciiz "lui"
+opcode16_string:
+        .asciiz "invalid"
+opcode17_string:
+        .asciiz "invalid"
+opcode18_string:
+        .asciiz "invalid"
+opcode19_string:
+        .asciiz "invalid"
+opcode20_string:
+        .asciiz "invalid"
+opcode21_string:
+        .asciiz "invalid"
+opcode22_string:
+        .asciiz "invalid"
+opcode23_string:
+        .asciiz "invalid"
+opcode24_string:
+        .asciiz "invalid"
+opcode25_string:
+        .asciiz "invalid"
+opcode26_string:
+        .asciiz "invalid"
+opcode27_string:
+        .asciiz "invalid"
+opcode28_string:
+        .asciiz "invalid"
+opcode29_string:
+        .asciiz "invalid"
+opcode30_string:
+        .asciiz "invalid"
+opcode31_string:
+        .asciiz "invalid"
+opcode32_string:
+        .asciiz "lb"
+opcode33_string:
+        .asciiz "lh"
+opcode34_string:
+        .asciiz "lw"
+opcode35_string:
+        .asciiz "invalid"
+opcode36_string:
+        .asciiz "lbu"
+opcode37_string:
+        .asciiz "lhu"
+opcode38_string:
+        .asciiz "invalid"
+opcode39_string:
+        .asciiz "invalid"
+opcode40_string:
+        .asciiz "sb"
+opcode41_string:
+        .asciiz "sh"
+opcode42_string:
+        .asciiz "invalid"
+opcode43_string:
+        .asciiz "sw"
+opcode44_string:
+        .asciiz "invalid"
+opcode45_string:
+        .asciiz "invalid"
+opcode46_string:
+        .asciiz "invalid"
+opcode47_string:
+        .asciiz "invalid"
+opcode48_string:
+        .asciiz "invalid"
+opcode49_string:
+        .asciiz "invalid"
+opcode50_string:
+        .asciiz "invalid"
+opcode51_string:
+        .asciiz "invalid"
+opcode52_string:
+        .asciiz "invalid"
+opcode53_string:
+        .asciiz "invalid"
+opcode54_string:
+        .asciiz "invalid"
+opcode55_string:
+        .asciiz "invalid"
+opcode56_string: 
+        .asciiz "invalid"
+opcode57_string:
+        .asciiz "invalid"
+opcode58_string:
+        .asciiz "invalid"
+opcode59_string:
+        .asciiz "invalid"
+opcode60_string:
+        .asciiz "invalid"
+opcode61_string:
+        .asciiz "invalid"
+opcode62_string:
+        .asciiz "invalid"
+opcode63_string:
+        .asciiz "invalid"
+r0_string:
+	.asciiz "$zero"
+r1_string:
+	.asciiz "$at"
+r2_string:
+	.asciiz "$v0"
+r3_string:
+	.asciiz "$v1"
+r4_string:
+	.asciiz "$a0"
+r5_string:
+	.asciiz "$a1"
+r6_string:
+	.asciiz "$a2"
+r7_string:
+	.asciiz "$a3"
+r8_string:
+	.asciiz "$t0"
+r9_string:
+	.asciiz "$t1"
+r10_string:
+	.asciiz "$t2"
+r11_string:
+	.asciiz "$t3"
+r12_string:
+	.asciiz "$t4"
+r13_string:
+	.asciiz "$t5"
+r14_string:
+	.asciiz "$t6"
+r15_string:
+	.asciiz "$t7"
+r16_string:
+	.asciiz "$s0"
+r17_string:
+	.asciiz "$s1"
+r18_string:
+	.asciiz "$s2"
+r19_string:
+	.asciiz "$s3"
+r20_string:
+	.asciiz "$s4"
+r21_string:
+	.asciiz "$s5"
+r22_string:
+	.asciiz "$s6"
+r23_string:
+	.asciiz	"$s7"
+r24_string:
+	.asciiz "$t8"
+r25_string:
+	.asciiz	"$t9"
+r26_string:
+	.asciiz "$k0"
+r27_string:
+	.asciiz "$k1"
+r28_string:
+	.asciiz	"$gp"
+r29_string:
+	.asciiz "$sp"
+r30_string:
+	.asciiz "$fp"
+r31_string:
+	.asciiz	"$ra"
+func0_string:
+        .asciiz "sll"
+func1_string:
+        .asciiz "invalid"
+func2_string:
+        .asciiz "srl"
+func3_string:
+        .asciiz "sra"
+func4_string:
+        .asciiz "sllv"
+func5_string:
+        .asciiz "invalid"
+func6_string:
+        .asciiz "srlv"
+func7_string:
+        .asciiz "srav"
+func8_string:
+        .asciiz "jr"
+func9_string:
+        .asciiz "jalr"
+func10_string:
+        .asciiz "invalid"
+func11_string:
+        .asciiz "invalid"
+func12_string:
+        .asciiz "syscall"
+func13_string:
+        .asciiz "invalid"
+func14_string:
+        .asciiz "invalid"
+func15_string:
+        .asciiz "invalid"
+func16_string:
+        .asciiz "mfhi"
+func17_string:
+        .asciiz "mthi"
+func18_string:
+        .asciiz "mflo"
+func19_string:
+        .asciiz "mtlo"
+func20_string:
+        .asciiz "invalid"
+func21_string:
+        .asciiz "invalid"
+func22_string:
+        .asciiz "invalid"
+func23_string:
+        .asciiz "invalid"
+func24_string:
+        .asciiz "mult"
+func25_string:
+        .asciiz "multu"
+func26_string:
+        .asciiz "div"
+func27_string:
+        .asciiz "divu"
+func28_string:
+        .asciiz "invalid"
+func29_string:
+        .asciiz "invalid"
+func30_string:
+        .asciiz "invalid"
+func31_string:
+        .asciiz "invalid"
+func32_string:
+        .asciiz "add"
+func33_string:
+        .asciiz "addu"
+func34_string:
+        .asciiz "sub"
+func35_string:
+        .asciiz "subu"
+func36_string:
+        .asciiz "and"
+func37_string:
+        .asciiz "or"
+func38_string:
+        .asciiz "xor"
+func39_string:
+        .asciiz "nor"
+func40_string:
+        .asciiz "invalid"
+func41_string:
+        .asciiz "invalid"
+func42_string:
+        .asciiz "slt"
+func43_string:
+        .asciiz "sltu"
+func44_string:
+        .asciiz "invalid"
+func45_string:
+        .asciiz "invalid"
+func46_string:
+        .asciiz "invalid"
+func47_string:
+        .asciiz "invalid"
+func48_string:
+        .asciiz "invalid"
+func49_string:
+        .asciiz "invalid"
+func50_string:
+        .asciiz "invalid"
+func51_string:
+        .asciiz "invalid"
+func52_string:
+        .asciiz "invalid"
+func53_string:
+        .asciiz "invalid"
+func54_string:
+        .asciiz "invalid"
+func55_string:
+        .asciiz "invalid"
+func56_string:
+        .asciiz "invalid"
+func57_string:
+        .asciiz "invalid"
+func58_string:
+        .asciiz "invalid"
+func59_string:
+        .asciiz "invalid"
+func60_string:
+        .asciiz "invalid"
+func61_string:
+        .asciiz "invalid"
+func62_string:
+        .asciiz "invalid"
+func63_string:
+        .asciiz "invalid"			
+nl:         
+	.asciiz	"\r\n" 			
+blankspace:
+	.asciiz	" " 					
+fileinput: 
+	.asciiz "machinecode.txt"      	# filename for input
+fileoutput:
+	.asciiz "assembly.txt"      	# filename for input
+newline:
+    	.asciiz "\n"
+leftparenthesis:
+    	.asciiz "("
+rightparenthesis:
+    	.asciiz ")"
+comma:
+    	.asciiz ","
+allinstructions: 
+	.space 1024
+instruction: 
+	.space 32
+pseudoaddress:
+	.space 26
+immediate:
+	.space 18
+opcode:
+	.space 8
+rs:
+	.space 7
+rt:
+	.space 7
+rd:
+	.space 7
+sa:
+	.space 7
+function:
+	.space 8	
+itoabuffer:
+	.space 2000
+itoafinal:
+	.space 2000
+
+data_end:
+#blank for calculating length of string output to text file
+		
+        .text
+main:
+  	# Open (for reading)
+  	li   $v0, 13       		# system call for open file
+  	la   $a0, fileinput     	# output file name
+  	li   $a1, 0        		# Open for reading (flags are 0: read, 1: write)
+  	li   $a2, 0        		
+  	syscall            		# open a file (file descriptor returned in $v0)
+  	move $t0, $v0      		# save the file descriptor 
+  	
+  	# Read from file just opened (entire contents to buffer)
+  	li   $v0, 14       		# system call for read from file
+  	move $a0, $t0      		# file descriptor 
+  	la   $a1, allinstructions   	# address of buffer to read into
+  	li   $a2, 1024        		# hardcoded buffer length
+  	syscall            		# read from file
+  
+  	# Close the file 
+  	li   $v0, 16       		# system call for close file
+  	move $a0, $t0      		# file descriptor to close
+  	syscall            		# close file
+  
+	j allinstructionsetup		# jump to next
+    
+# only happens once per run, set the starting address for s1, which is used to loop through each instruction and is saved after each pass and not reset
+allinstructionsetup:
+	la $s0, allinstructions  	# la means load address (so we load the address of allinstructions into $s0)
+	la $s1, allinstructions  	# la means load address (so we load the address of allinstructions into $s1) this is for the get instruction section
+	li $s2, 0			# set s2 = 0, this variable is set to 2 after first loop and is used to move past new line character stored at end of each line in allinstructions
+	j currentinstructionsetup	# jump to next
+
+# get instruction section
+# the section it the setup and getter section, each area of the instruction is stored to the respective buffer
+# happens at the beginning of each loop, s1 points to the list of all instructions and s2 is used to move past the new line character
+currentinstructionsetup:
+	li $t2, 0      			# t2 is the counter. set it to 0 
+	la $t4, instruction  		# la means load address (so we load the address of instruction buffer into t4)
+	li $t5, 32			# t5 in counter max. set to 32
+	add $s1, $s1, $s2		# add s2 to the currect address of allinstructions (moves past new line character after first loop)
+	j getinstruction		# jump to next
+
+getinstruction:
+	beq $t5, $t2  opcodesetup 	# if t5 == t2 then go to label end (32 bits of allinstruction are stored to instruction string)  
+	lb $t3, 0($s1)  		# Load the first byte from address in s1 (which is allinstruction string) into t3
+	beqz $t3, exit   		# if t3 == 0 then go to label end (end of instruction) 
+	sb $t3, 0($t4)                  # store current character in the instruction buffer
+	addi $t4, $t4, 1               	# increment instruction address  
+	add $s1, $s1, 1 		# increment all instruction address  
+	add $t2, $t2, 1 		# and increment the counter of course      	  
+	j getinstruction      		# finally loop    
+    	     	     	      	     	     	     	     	     	     	     	    
+opcodesetup:
+	la $t6, instruction  		# la means load address (so we load the address of instruction buffer into t6)
+	li $t2, 0      			# t2 is the counter. set it to 0 
+	la $t4, opcode  		# la means load address (so we load the address of opcode into t4)
+	li $t5, 6			# t5 in counter max. set to 6
+	j getopcode			# jump to next
+
+
+getopcode:
+	beq $t5, $t2  rssetup 		# if t5 == t2 then go to label end (6 bits of instruction are stored to opcode string)  
+	lb $t3, 0($t6)  		# Load the first byte from address in t6 (which is instruction string) into t3 
+	sb $t3, 0($t4)                  # store current character in the opcode buffer
+	addi $t4, $t4, 1               	# increment opcode address   
+	add $t6, $t6, 1 		# increment instruction address   
+	add $t2, $t2, 1 		# and increment the counter of course  
+	j getopcode      		# finally loop   	      	    
+  	      	      	     	   	  	   	  	   	 	  
+rssetup:    	
+	li $t2, 0      			# t2 is the counter. set it to 0 
+	la $t4, rs    			# la means load address (so we load the address of rs buffer into t4)
+	li $t5, 5     	 	    	# t5 in counter max. set to 5    	
+	j getrs				# jump to next
+     	 	    	    	 	    	    	
+getrs:
+	beq $t5, $t2  rtsetup 		# if t5 == t2 then go to label end (5 bits of instruction are stored to rs string)  
+	lb $t3, 0($t6)  		# Load the first byte from address in t6 (which is instruction string) into t3 
+	sb $t3, 0($t4)                  # store current character in the rs buffer
+	addi $t4, $t4, 1               	# increment rs address
+	add $t6, $t6, 1 		# increment instruction address  
+	add $t2, $t2, 1 		# and increment the counter of course
+	j getrs      			# finally loop       	 	    	    	 	    	    	 	    	    	 	    	    	     	 	    	    	 	    	    	 	    	    	 	    	    	
+    	    	    	   
+rtsetup:    	
+	li $t2, 0      			# t2 is the counter. set it to 0 
+	la $t4, rt    			# la means load address (so we load the address of rt buffer into t4)
+	li $t5, 5    	 	    	# t5 in counter max. set to 5    	
+	j getrt				# jump to next
+     	 	    	    	 	    	    	
+getrt:
+	beq $t5, $t2  rdsetup 		# if t5 == t2 then go to label end (5 bits of instruction are stored to rt string)  
+	lb $t3, 0($t6)  		# Load the first byte from address in t6 (which is instruction string) into t3 
+	sb $t3, 0($t4)                  # store current character in the rt buffer
+	addi $t4, $t4, 1               	# increment rt address  
+	add $t6, $t6, 1 		# increment instruction address  
+	add $t2, $t2, 1 		# and increment the counter of course  
+	j getrt      			# finally loop  
+     	  		    	    	    	    	    	    	    	    	       
+rdsetup:   	
+	li $t2, 0      			# t2 is the counter. set it to 0 
+	la $t4, rd    			# la means load address (so we load the address of rd buffer into t4)
+	li $t5, 5     	 	    	# t5 in counter max. set to 5    	
+	j getrd				# jump to next
+     	 	    	    	 	    	    	
+getrd:
+	beq $t5, $t2  sasetup 		# if t5 == t2 then go to label end (5 bits of instruction are stored to rd string)  
+	lb $t3, 0($t6)  		# Load the first byte from address in t6 (which is instruction string) into t3 
+	sb $t3, 0($t4)                  # store current character in the rd buffer
+	addi $t4, $t4, 1               	# increment rd address  
+	add $t6, $t6, 1 		# increment instruction address  
+	add $t2, $t2, 1 		# and increment the counter of course  
+	j getrd      			# finally loop  
+    	 	    	    	 	    	    	 	    	    	 	    	    	     	 	    	    	 	    	    	 	    	    	 	    	    		    
+sasetup:   	
+	li $t2, 0      			# t2 is the counter. set it to 0 
+	la $t4, sa    			# la means load address (so we load the address of sa buffer into t4)
+	li $t5, 5    	 	    	# t5 in counter max. set to 5    	
+	j getsa				# jump to next
+     	 	    	    	 	    	    	
+getsa:
+	beq $t5, $t2  functionsetup 	# if t5 == t2 then go to label end (5 bits of instruction are stored to sa string)  
+	lb $t3, 0($t6)  		# Load the first byte from address in t6 (which is instruction string) into t3 
+	sb $t3, 0($t4)                  # store current character in the sa buffer
+	addi $t4, $t4, 1               	# increment sa address  
+	add $t6, $t6, 1 		# increment instruction address  
+	add $t2, $t2, 1 		# and increment the counter of course   
+	j getsa      			# finally loop  
+	    	    	    	    	    	    	    	    	    	    	    	    	    	   
+functionsetup:    	
+	li $t2, 0      			# t2 is the counter. set it to 0 
+	la $t4, function    		# la means load address (so we load the address of function buffer into t4)
+	li $t5, 6      	 	    	# t5 in counter max. set to 5    	
+	j getfunction			# jump to next
+     	 	    	    	 	    	    	
+getfunction:
+	beq $t5, $t2  endgetters 	# if t5 == t2 then go to label end (6 bits of instruction are stored to function string)  
+	lb $t3, 0($t6)  		# Load the first byte from address in t6 (which is instruction string) into t3 
+	sb $t3, 0($t4)                  # store current character in the function buffer
+	addi $t4, $t4, 1               	# increment function address  
+	add $t6, $t6, 1 		# increment instruction address  
+	add $t2, $t2, 1 		# and increment the counter of course  
+	j getfunction      		# finally loop  
+
+# this marks the end of the getter labels for the instruction loop     	 	    	    	 	    	    	 	    	    	 	    	    	     	 	    	    	 	    	    	 	    	    	 	    	    	    	  	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	     	 	    	    	 	    	    	 	    	    	 	    	    	     	 	    	    	 	    	    	 	    	    	 	    	    	    	  	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	
+endgetters: 
+     	li $s2, 2     			# set $s2 to 2 after first run, this allows entire program to move past the new line character stored in allinstructions
+	la $t1, opcode			# prologue for binarytodecimal, load address of string to convert into t1
+	jal binarytodecimal		# jal to binarytodecimal, converted decimal integer to stored into t7
+	j computedgoto    		# jump to next, number for computedgoto is already in t7 thanks to binarytodecimal	      	      	      	    
+  	      	      	      	      	      	    	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	     	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	       
+# computedgoto -- structure to handle opcodes for any instruction
+#
+# prologue
+# arguments:
+#   t7 -- decimal conversion of opcode code
+computedgoto:
+	la $t0, label0			# load address of first label
+	sll $t1, $t7, 2			# shift logical from value in t7 by 2 btyes, accounts for number of bytes each goto line takes up (2 bytes each)
+	add $t2, $t0, $t1		# store this value into t2
+	jr $t2				# jump to the value in t2 which will land on correct label for the opcode binarytodecimal convert shifted by 2
+label0:
+        j opcode0
+label1:
+        j opcode1
+label2:
+        j opcode2
+label3:
+        j opcode3
+label4:
+        j opcode4
+label5:
+        j opcode5
+label6:
+        j opcode6
+label7:
+        j opcode7
+label8:
+        j opcode8
+label9:
+        j opcode9
+label10:
+        j opcode10
+label11:
+        j opcode11
+label12:
+        j opcode12
+label13:
+        j opcode13
+label14:
+        j opcode14
+label15:
+        j opcode15
+label16:
+        j opcode16
+label17:
+        j opcode17
+label18:
+        j opcode18
+label19:
+        j opcode19
+label20:
+        j opcode20
+label21:
+        j opcode21
+label22:
+        j opcode22
+label23:
+        j opcode23
+label24:
+        j opcode24
+label25:
+        j opcode25
+label26:
+        j opcode26
+label27:
+        j opcode27
+label28:
+        j opcode28
+label29:
+        j opcode29
+label30:
+        j opcode30
+label31:
+        j opcode31
+label32:
+        j opcode32
+label33:
+        j opcode33
+label34:
+        j opcode34
+label35:
+        j opcode35
+label36:
+        j opcode36
+label37:
+        j opcode37
+label38:
+        j opcode38
+label39:
+        j opcode39
+label40:
+        j opcode40
+label41:
+        j opcode41
+label42:
+        j opcode42
+label43:
+        j opcode43
+label44:
+        j opcode44
+label45:
+        j opcode45
+label46:
+        j opcode46
+label47:
+        j opcode47
+label48:
+        j opcode48
+label49:
+        j opcode49
+label50:
+        j opcode50
+label51:
+        j opcode51
+label52:
+        j opcode52
+label53:
+        j opcode53
+label54:
+        j opcode54
+label55:
+        j opcode55
+label56:
+        j opcode56
+label57:
+        j opcode57
+label58:
+        j opcode58
+label59:
+        j opcode59
+label60:
+        j opcode60
+label61:
+        j opcode61
+label62:
+        j opcode62
+label63:
+        j opcode63
+
+     	
+# these are all the opcode labels for the computedgoto
+# any r type will jump to the rtype label
+# any j type will first write the opcode with the fputs function, then a blankspace, then jump to the j type
+# any i type will first write the opcode with the fputs function, then a blankspace, then jump to the i type
+# there is also error handling for any invalid opcodes, which will output the invalid string and jump to exitgoto      	     	     	
+opcode0:
+	###this happens for any r type opcode above, jump to rtype
+    	j       rtype
+opcode1:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode2:
+        ###this happens for any j type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode2_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       jtype
+opcode3:
+        ###this happens for any j type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode3_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       jtype
+opcode4:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode4_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode5:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode5_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode6:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode6_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode7:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode7_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode8:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode8_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode9:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode9_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode10:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode10_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode11:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode11_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode12:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode12_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode13:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode13_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode14:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode14_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode15:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode15_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode16:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode17:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode18:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode19:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode20:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode21:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode22:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode23:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode24:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode25:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode26:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode27:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode28:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode29:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode30:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode31:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode32:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode32_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode33:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode33_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode34:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode34_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode35:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode36:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode36_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode37:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode37_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode38:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode39:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode39_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode40:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode40_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode41:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode41_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode42:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode43:
+        ###this happens for any i type opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode43_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       itype
+opcode44:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode45:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode46:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode47:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode48:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode49:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode50:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode51:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode52:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode53:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode54:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode55:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode56:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode57:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode58:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode59:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode60:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode61:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode62:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+opcode63:
+        ###this happens for any invalid opcode above, write specific string and newline then exit
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       exitgoto
+
+# used for any invalid opcode    	
+exitgoto:
+  	j currentinstructionsetup    	# otherwise start currentinstructionsetup again to loop to next instruction 
+  	
+# all r type instructions  	  	
+rtype:
+	j rwrite			# jump to writer
+rwrite:
+	###this goes into any r opcode above
+	
+    	#synatx for using fputs to output string in conjunction with another $jra functon
+    	# this same structure is used on each type of instruction that has to output a string with another goto
+    	la $t1, function		# load function string into t1 for binary to decimal
+	jal binarytodecimal		# convert function string into decimal number stored into t7
+	jal owrite			# open file for writing
+    	jal computedgoto3		# use value converted (still in t7) for computedgoto3 to write correct function code
+    	jal fputs 			# computedgoto3 already took care of prologue for fputs, which is a string loaded into a1, so call fputs to write string stored in a1
+	jal oclose			# close file
+
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+     	move    $v0,$s6                 # set the file descriptor
+    	jal oclose
+    	
+    	#synatx for using fputs to output string in conjunction with another $jra functon
+    	la $t1, rd
+	jal binarytodecimal
+	jal owrite
+    	jal computedgoto2
+    	jal fputs 
+	jal oclose
+
+	
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,comma
+    	jal     fputs
+     	move    $v0,$s6                 # set the file descriptor
+    	jal oclose	
+    	
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+     	move    $v0,$s6                 # set the file descriptor
+    	jal oclose
+    	   	
+    	
+    	la $t1, rs
+	jal binarytodecimal
+	jal owrite
+    	jal computedgoto2
+    	jal fputs 
+	jal oclose
+
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,comma
+    	jal     fputs
+     	move    $v0,$s6                 # set the file descriptor
+    	jal oclose
+    					
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor
+    	jal oclose
+    	
+
+ 	#synatx for using fputs to output string in conjunction with another $jra functon
+    	la $t1, rt
+	jal binarytodecimal
+	jal owrite
+    	jal computedgoto2
+    	jal fputs 
+	jal oclose			
+			
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	
+    	move    $v0,$s6                 # set the file descriptor
+    	jal oclose     	   	   	
+    	###this goes into any r opcode above   	
+    	j exitwriters
+    	
+itype:
+####immediate getter    
+immediatesetup:
+	la $t6, instruction      		# t6 is the address of the current instruction
+	add $t6, $t6, 16 			# increment the address to 16, where immediate value starts  	
+	li $t2, 0      				# t2 is the counter. set it to 0 
+	la $t4, immediate   			# la means load address (so we load the address of immediate buffer into t4)
+	li $t5, 16     	 	    	    	# t5 is counter max set to 16
+	j getimmediate				# jump to next
+    	    	   	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	   	    	   	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	    	
+getimmediate:
+	beq $t5, $t2  iwrite 			# if $t5 == $t2 then go to label   
+	lb $t3, 0($t6)  			# Load the first byte from address in t6 (which is instruction string) into t3
+	sb $t3, 0($t4)                  	# store current character in the immediate buffer
+	addi $t4, $t4, 1               		# increment immediate address
+	add $t6, $t6, 1 			# increment instruction address
+	add $t2, $t2, 1 			# and increment the counter of course  
+	j getimmediate      			# finally loop 
+
+iwrite:
+    	#synatx for using fputs to output string in conjunction with another $jra functon
+    	la $t1, rt
+	jal binarytodecimal
+	jal owrite
+    	jal computedgoto2
+    	jal fputs 
+	jal oclose
+	  
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,comma
+    	jal     fputs
+     	move    $v0,$s6                 # set the file descriptor
+    	jal oclose
+    	
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor
+    	jal oclose 
+    	
+	#synatx for using fputs to output string in conjunction with another $jra functon    	
+    	la $t1, rs
+	jal binarytodecimal
+	jal owrite
+    	jal computedgoto2
+    	jal fputs 
+	jal oclose
+	
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,comma
+    	jal     fputs
+     	move    $v0,$s6                 # set the file descriptor
+    	jal oclose
+    	
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor
+    	jal oclose  
+    	   	    	   	    	   	
+  
+    	#synatx for using fputs to output string in conjunction with another $jra functon  	
+    	la $t1, immediate
+    	jal binarytodecimal		# converted immediate value string into decimal integer stored in t7
+	jal itoa			# call itoa function on t7 converted value from binary to decimal
+					# integer converted to string is now stored in itoafinal
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,itoafinal		# write the decimal integer converted to string stored in itoafinal
+    	jal     fputs
+     	move    $v0,$s6                 # set the file descriptor
+    	jal oclose	
+   	jal itoaclear			# clear intofinal string after conversion
+   	
+   	
+
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	
+    	move    $v0,$s6                 # set the file descriptor
+    	jal oclose 	
+  
+     	j exitwriters 
+###this goes into any i opcode above  
+     	
+jtype:    
+pasetup:
+	la $t6, instruction      	# la means load address (so we load the address of instruction buffer into t6)
+	add $t6, $t6, 6 		# increment instruction address to 6, where pseudoaddress starts     	
+	li $t2, 0      			# t2 is the counter. set it to 0 
+	la $t4, pseudoaddress    	# la means load address (so we load the address of pseudoaddress buffer into t4)
+	li $t5, 26      	 	# t5 is the counter max. set it to 26    	    	
+	j getpa				# jump next
+     	 	    	    	 	    	    	
+getpa:
+	beq $t5, $t2  jwrite 		# if t5 == t2 then go to label end (66 bits of instruction are stored to pseudoaddress string)  
+	lb $t3, 0($t6)  		# Load the first byte from address in t6 (which is instruction string) into t3 
+	sb $t3, 0($t4)                  # store current character in the pseudoaddress buffer
+	addi $t4, $t4, 1               	# increment pseudoaddress address  
+	add $t6, $t6, 1 		# increment instruction address  
+	add $t2, $t2, 1 		# and increment the counter of course  
+	j getpa      			# finally loop
+
+jwrite:
+      	la $t1, pseudoaddress
+    	jal owrite
+
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,pseudoaddress
+    	jal     fputs
+
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,nl
+    	jal     fputs
+    	
+    	move    $v0,$s6                 # set the file descriptor
+    	jal oclose 	
+  	
+     	j exitwriters   
+    
+   	      	                                        	                                            
+exitwriters:
+	
+  	j currentinstructionsetup    	# start currentinstructionsetup again to loop to next instruction
+
+
+
+
+
+# computedgoto2 -- structure to get the string the corresponds to the converted register value
+#
+# prologue
+# arguments:
+#   t7 -- decimal conversion of register 
+computedgoto2:
+	la $t0, register0	# load address of first label
+	sll $t1, $t7, 2		# shift logical from value in t7 by 2 btyes, accounts for number of bytes each goto line takes up (2 bytes each)
+	add $t2, $t0, $t1	# store this value into t2
+	jr $t2			# jump to the value in t2 which will land on correct label for the opcode binarytodecimal convert shifted by 2
+register0:
+        j r0
+register1:
+        j r1
+register2:
+        j r2
+register3:
+        j r3
+register4:
+        j r4
+register5:
+        j r5
+register6:
+        j r6
+register7:
+        j r7
+register8:
+        j r8
+register9:
+        j r9
+register10:
+        j r10
+register11:
+        j r11
+register12:
+        j r12
+register13:
+        j r13
+register14:
+        j r14
+register15:
+        j r15
+register16:
+        j r16
+register17:
+        j r17
+register18:
+        j r18
+register19:
+        j r19
+register20:
+        j r20
+register21:
+        j r21
+register22:
+        j r22
+register23:
+        j r23
+register24:
+        j r24
+register25:
+        j r25
+register26:
+        j r26
+register27:
+        j r27
+register28:
+        j r28
+register29:
+        j r29
+register30:
+        j r30
+register31:
+        j r31
+        
+# these are all the register labels for the computedgoto2
+# each label loads the correct string into a1 then jumps back to calling function which will output the string in a1 with fputs        
+r0:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r0_string
+    	jr $ra
+r1:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r1_string
+    	jr $ra
+r2:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r2_string
+    	jr $ra
+r3:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r3_string
+    	jr $ra
+r4:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r4_string
+    	jr $ra
+r5:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r5_string
+    	jr $ra
+r6:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r6_string
+    	jr $ra
+r7:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r7_string
+    	jr $ra
+r8:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r8_string
+    	jr $ra
+r9:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r9_string
+    	jr $ra
+r10:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r10_string
+    	jr $ra
+r11:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r11_string
+    	jr $ra
+r12:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r12_string
+    	jr $ra
+r13:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r13_string
+    	jr $ra
+r14:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r14_string
+    	jr $ra
+r15:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r15_string
+    	jr $ra
+r16:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r16_string
+    	jr $ra
+r17:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r17_string
+    	jr $ra
+r18:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r18_string
+    	jr $ra
+r19:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r19_string
+    	jr $ra
+r20:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r20_string
+    	jr $ra
+r21:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r21_string
+    	jr $ra
+r22:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r22_string
+    	jr $ra
+r23:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r23_string
+    	jr $ra
+r24:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r24_string
+    	jr $ra
+r25:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r25_string
+    	jr $ra
+r26:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r26_string
+    	jr $ra
+r27:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r27_string
+    	jr $ra
+r28:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r28_string
+    	jr $ra
+r29:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r29_string
+    	jr $ra
+r30:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r30_string
+    	jr $ra
+r31:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r31_string
+    	jr $ra
+    	
+    	
+# computedgoto3 -- structure to write function code
+#
+# prologue
+# arguments:
+#   t7 -- decimal conversion of function code      	
+computedgoto3:
+	la $t0, function0	# load address of first label
+	sll $t1, $t7, 2		# shift logical from value in t7 by 2 btyes, accounts for number of bytes each goto line takes up (2 bytes each)
+	add $t2, $t0, $t1	# store this value into t2	
+	jr $t2    		# jump to the value in t2 which will land on correct label for the opcode binarytodecimal convert shifted by 2
+function0:
+        j func0
+function1:
+        j func1
+function2:
+        j func2
+function3:
+        j func3
+function4:
+        j func4
+function5:
+        j func5
+function6:
+        j func6
+function7:
+        j func7
+function8:
+        j func8
+function9:
+        j func9
+function10:
+        j func10
+function11:
+        j func11
+function12:
+        j func12
+function13:
+        j func13
+function14:
+        j func14
+function15:
+        j func15
+function16:
+        j func16
+function17:
+        j func17
+function18:
+        j func18
+function19:
+        j func19
+function20:
+        j func20
+function21:
+        j func21
+function22:
+        j func22
+function23:
+        j func23
+function24:
+        j func24
+function25:
+        j func25
+function26:
+        j func26
+function27:
+        j func27
+function28:
+        j func28
+function29:
+        j func29
+function30:
+        j func30
+function31:
+        j func31
+function32:
+        j func32
+function33:
+        j func33
+function34:
+        j func34
+function35:
+        j func35
+function36:
+        j func36
+function37:
+        j func37
+function38:
+        j func38
+function39:
+        j func39
+function40:
+        j func40
+function41:
+        j func41
+function42:
+        j func42
+function43:
+        j func43
+function44:
+        j func44
+function45:
+        j func45
+function46:
+        j func46
+function47:
+        j func47
+function48:
+        j func48
+function49:
+        j func49
+function50:
+        j func50
+function51:
+        j func51
+function52:
+        j func52
+function53:
+        j func53
+function54:
+        j func54
+function55:
+        j func55
+function56:
+        j func56
+function57:
+        j func57
+function58:
+        j func58
+function59:
+        j func59
+function60:
+        j func60
+function61:
+        j func61
+function62:
+        j func62
+function63:
+        j func63
+        
+# these are all the function labels for the computedgoto3
+# each label loads the correct string into a1 then jumps back to calling function which will output the string in a1 with fputs         
+func0:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func0_string
+    	jr $ra
+func1:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func1_string
+    	jr $ra
+func2:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func2_string
+    	jr $ra
+func3:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func3_string
+    	jr $ra
+func4:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func4_string
+    	jr $ra
+func5:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func5_string
+    	jr $ra
+func6:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func6_string
+    	jr $ra
+func7:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func7_string
+    	jr $ra
+func8:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func8_string
+    	jr $ra
+func9:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func9_string
+    	jr $ra
+func10:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func10_string
+    	jr $ra
+func11:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func11_string
+    	jr $ra
+func12:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func12_string
+    	jr $ra
+func13:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func13_string
+    	jr $ra
+func14:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func14_string
+    	jr $ra
+func15:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func15_string
+    	jr $ra
+func16:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func16_string
+    	jr $ra
+func17:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func17_string
+    	jr $ra
+func18:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func18_string
+    	jr $ra
+func19:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func19_string
+    	jr $ra
+func20:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func20_string
+    	jr $ra
+func21:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func21_string
+    	jr $ra
+func22:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func22_string
+    	jr $ra
+func23:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func23_string
+    	jr $ra
+func24:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func24_string
+    	jr $ra
+func25:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func25_string
+    	jr $ra
+func26:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func26_string
+    	jr $ra
+func27:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func27_string
+    	jr $ra
+func28:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func28_string
+    	jr $ra
+func29:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func29_string
+    	jr $ra
+func30:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func30_string
+    	jr $ra
+func31:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func31_string
+    	jr $ra
+func32:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func32_string
+    	jr $ra
+func33:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func33_string
+    	jr $ra
+func34:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func34_string
+    	jr $ra
+func35:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func35_string
+    	jr $ra
+func36:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func36_string
+    	jr $ra
+func37:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func37_string
+    	jr $ra
+func38:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func38_string
+    	jr $ra
+func39:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func39_string
+    	jr $ra
+func40:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func40_string
+    	jr $ra
+func41:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func41_string
+    	jr $ra
+func42:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func42_string
+    	jr $ra
+func43:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func43_string
+    	jr $ra
+func44:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func44_string
+    	jr $ra
+func45:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func45_string
+    	jr $ra
+func46:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func46_string
+    	jr $ra
+func47:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func47_string
+    	jr $ra
+func48:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func48_string
+    	jr $ra
+func49:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func49_string
+    	jr $ra
+func50:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func50_string
+    	jr $ra
+func51:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func51_string
+    	jr $ra
+func52:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func52_string
+    	jr $ra
+func53:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func53_string
+    	jr $ra
+func54:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func54_string
+    	jr $ra
+func55:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func55_string
+    	jr $ra
+func56:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func56_string
+    	jr $ra
+func57:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func57_string
+    	jr $ra
+func58:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func58_string
+    	jr $ra
+func59:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func59_string
+    	jr $ra
+func60:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func60_string
+    	jr $ra
+func61:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func61_string
+    	jr $ra
+func62:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func62_string
+    	jr $ra
+func63:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func63_string
+    	jr $ra
+
+
+
+
+exit:
+	
+    	li      $v0, 10              # terminate program run and
+    	syscall                      # Exit
+
+
+
+
+
+
+# owrite -- Open (for writing) a file that exists
+#
+# prologue to oclose
+# nothing needed, output file is coded into this
+owrite:	                             
+    li      $v0,13                  # system call for open file
+    la      $a0,fileoutput          # output file name
+    li      $a1,9                   # Open for writing (flags are 0: read, 1: write)
+    li      $a2,0                   # modeA is ignored
+    syscall                         # open a file (file descriptor returned in $v0)
+    move    $s6,$v0                 # save the file descriptor
+    jr $ra              	    # return   
+    
+
+
+        
+# oclose -- close any output file
+#
+# prologue to oclose
+# arguments:
+#   must be set during prologue to function
+#   s6 -- file descriptor     
+oclose:
+    ###############################################################
+    # Close the file
+    li      $v0,16                  # system call for close file
+    move    $a0,$s6                 # file descriptor to close
+    syscall                         # close
+    jr $ra              		# return 
+
+  
+                                                                                                                 
+# fputs -- output string to file
+#
+# prologue to fputs
+# arguments:
+#   must be set during prologue to function
+#   a1 -- buffer address
+#   s6 -- file descriptor
+#
+# registers:
+#   handled by fputs_loop
+#   t0 -- current buffer char
+#   a2 -- buffer length
+fputs:
+    move    $a2,$a1                 	# get buffer address
+
+fputs_loop:
+    lb      $t0,0($a2)              	# get next character -- is it EOS?
+    addiu   $a2,$a2,1               	# pre-increment pointer
+    bnez    $t0,fputs_loop          	# no, loop
+
+    subu    $a2,$a2,$a1             	# get strlen + 1
+    subiu   $a2,$a2,1               	# compensate for pre-increment
+
+    move    $a0,$s6                 	# get file descriptor
+    li      $v0,15                  	# syscall for write to file
+    syscall
+    jr $ra              		# return 
+
+
+
+# itoa -- convert integer to string with ASCII values
+#
+# prologue to itoa
+# arguments:
+#   must be set during prologue to function
+#   t7 -- convert, works well with binarytodecimal
+#
+# output:
+#   handled by itoa
+#   itoafinal -- converted string
+itoa:	
+	# number in $t7	 
+	addi $t1,$t7, 0   		# t1=$t7
+	addi $t0,$zero,10 		# t0=10
+	la $t4, itoabuffer		# load starting addresses of buffers 
+	la $t7, itoafinal  
+	li $t3, 0
+	j loop
+	 
+loop:
+	div $t1,$t0    			#t1/10
+	mflo $t1      			#t1 = quotient
+	mfhi $t2      			#t2 =remainder
+	addi $t2,$t2,48 		#Convert to ASCII
+	sb $t2,($t4)	 		#Push t2 into $t4
+	add $t3,$t3,1 			#counter
+	add $t4,$t4,1 			#address of buffer
+	bne $t1,$zero,loop 		#If t1<>0 go to Loop
+	li $t5, 0
+	add $t4,$t4,-1 			# move back one from null terminator that is added before storing items to next buffer
+	j  order
+		  
+order:	  
+	lb $t1,($t4) 			# pop the last byte from $t4
+	sb $t1,($t7) 			# savebyte to the proper location of memory onto new buffer
+	add $t7, $t7, 1   		# address of buffer 2
+	add $t5, $t5, 1			# counter 2	
+	add $t4, $t4, -1		# address of buffer 1, moving backwards from where we left off at null terminator
+	bne $t3,$t5,order 		#If t0<>0 go to order, ends when counter2 reaches counter 1  
+       	jr $ra 	
+    	
+itoaclear:
+	la $t4, itoabuffer		# load starting addresses of buffer 
+	la $t7, itoafinal    		# load starting addresses of buffer final
+	la $t5, data_end		# null terminator
+ 	li $t3, 0			# t3 counter  = 0
+ 	li $t6, 2			# t6 counter max = 2
+ 	j loop2				# jump next
+ 
+loop2:
+	lb $t1,($t5) 			# pop the last byte from $t5
+	sb $t1,($t4) 			# savebyte to the proper location of memory onto new buffer
+	sb $t1,($t7) 			# savebyte to the proper location of memory onto new buffer
+	add $t5,$t5,1 			# address of empty buffer
+	add $t4,$t4,1 			# address of buffer
+	add $t7, $t7, 1   		# address of buffer 2
+	add $t3,$t3,1 			# counter   	    	
+	bne $t3,$t6,loop2 		#If t0<>0 go to loop2, ends when counter reaches 2
+	jr $ra     
+		    	    	
+# binarytodecimal -- convert binary string of 0's and 1's to decimal integer
+#
+# prologue to itoa
+# arguments:
+#   must be set during prologue to function
+#   t1 -- address of binary string to convert
+#
+# output:
+#   t7 -- converted decimal integer
+# epilogue
+#   there are print drivers still intact at the end for testing, they are commented out right now though
+binarytodecimal:
+li $t4, 0               		# initialize sum to 0
+j startConvert
+
+startConvert:
+  li $t9, 32             		# initialize counter to 32
+  j firstByte
+ 
+firstByte:
+  	lb $a0, ($t1)      		# load the first byte
+ 	blt $a0, 48, printSum    	#  
+  	addi $t1, $t1, 1          	# increment offset
+  	subi $a0, $a0, 48         	# subtract 48 to convert to int value
+  	subi $t9, $t9, 1          	# decrement counter
+  	beq $a0, 0, isZero
+  	beq $a0, 1, isOne
+  	jr $ra
+
+isZero:
+   	j firstByte
+
+isOne:                   		# do 2^counter 
+   	li $t8, 1               	# load 1
+   	sllv $t5, $t8, $t9    		# shift left by counter = 1 * 2^counter, store in $t5
+   	add $t4, $t4, $t5         	# add sum to previous sum 
+
+   	j firstByte
+
+convert:
+
+printSum:
+  	srlv $t4, $t4, $t9		# calculate result
+     	move $t7, $t4			# store result in t7
+     	
+     	#print driver for checking during building
+  	#la   $a0, newline      	# load address of print heading
+      	#li   $v0, 4           		# specify Print String service
+     	#syscall               		# print heading
+     		
+ 	#move $a0, $t4      		# load sum
+ 	#li $v0, 1      		# print int
+ 	#syscall
+ 	
+ 	#la   $a0, newline      	# load address of print heading
+      	#li   $v0, 4           		# specify Print String service
+     	#syscall               		# print heading    	
+     
+ 	jr $ra
+
+printresult:
+ 	la   $a0, newline      		# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+     	syscall               		# print heading
+     		
+ 	move $a0, $t4      		# load sum
+ 	li $v0, 1      			# print int
+ 	syscall
+ 	
+ 	la   $a0, newline      		# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+     	syscall               		# print heading 

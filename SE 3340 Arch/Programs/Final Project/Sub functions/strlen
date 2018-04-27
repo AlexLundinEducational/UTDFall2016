@@ -1,0 +1,73 @@
+    .data
+
+fout:       .asciiz     "testout.txt"   # filename for output
+buffer:     .asciiz     "The quick brown fox jumps over the lazy dog."
+nl:         .asciiz     "\r\n"
+
+    .text
+    .globl  main
+
+main:
+
+    ###############################################################
+    # Open (for writing) a file that does not exist
+    li      $v0,13                  # system call for open file
+    la      $a0,fout                # output file name
+    li      $a1,1                   # Open for writing (flags are 0: read, 1: write)
+    li      $a2,0                   # modeA is ignored
+    syscall                         # open a file (file descriptor returned in $v0)
+    move    $s6,$v0                 # save the file descriptor
+
+    ###############################################################
+    # Write to file just opened
+
+    # output string the first time
+    la      $a1,buffer
+    jal     fputs
+
+    # output newline
+    la      $a1,nl
+    jal     fputs
+
+    # output string the second time
+    la      $a1,buffer
+    jal     fputs
+
+    # output newline
+    la      $a1,nl
+    jal     fputs
+
+    ###############################################################
+    # Close the file
+    li      $v0,16                  # system call for close file
+    move    $a0,$s6                 # file descriptor to close
+    syscall                         # close
+
+    li      $v0,10
+    syscall
+
+# fputs -- output string to file
+#
+# arguments:
+#   a1 -- buffer address
+#   s6 -- file descriptor
+#
+# registers:
+#   t0 -- current buffer char
+#   a2 -- buffer length
+fputs:
+    move    $a2,$a1                 # get buffer address
+
+fputs_loop:
+    lb      $t0,0($a2)              # get next character -- is it EOS?
+    addiu   $a2,$a2,1               # pre-increment pointer
+    bnez    $t0,fputs_loop          # no, loop
+
+    subu    $a2,$a2,$a1             # get strlen + 1
+    subiu   $a2,$a2,1               # compensate for pre-increment
+
+    move    $a0,$s6                 # get file descriptor
+    li      $v0,15                  # syscall for write to file
+    syscall
+
+    jr      $ra                     # return

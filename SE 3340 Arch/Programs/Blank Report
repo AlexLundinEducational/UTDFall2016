@@ -1,0 +1,34 @@
+Alex Lundin
+CS/CE 3340
+Fall 2016
+
+Report
+
+1.) Problem statement
+
+2.) Approach to solution
+
+3.) Solution Description
+
+
+Report Standards
+Consider the audience of your report to be your technical manager (who is overseeing dozens of projects). 
+You need to inform the manager of the importance and description of your work. 
+You need to explain how you proceeded to complete the assignment and describe your solution.
+
+Each report must include at least three sections:
+1. Problem statement,
+This section should include the explanation of the projects importance as well as a description of the problem in your own words.
+
+2. Approach to solution,
+This section should include information such as a verbal description of your design, the languages selected, and the tools used.
+
+3. Solution description.
+This section should include information about how to build and execute your solution. 
+It is appropriate to include screen captures of the build and execution in this section. 
+You should note when you are reusing code and when you needed to write new code. 
+You should also make special note of rewriting code to fit the specific needs of this assignment.
+Each section shall include at least one paragraph. All paragraphs should include at least three sentences. 
+Code shall be kept to a minimum in the report (no more than two lines of code per page). 
+Larger code segments should be reserved for appendices. Any tables, charts, graphs, or figures should include at least one paragraph which describes them.
+These notes indicate a minimum quality of a report which is worth about half of the report value. Reports should be spelling and grammar error free (run a spelling/grammar checker before submission).

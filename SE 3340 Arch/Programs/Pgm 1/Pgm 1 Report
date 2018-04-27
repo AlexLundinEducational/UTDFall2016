@@ -1,0 +1,24 @@
+Alex Lundin
+CS/CE 3340
+Fall 2016
+
+Pgm 1 Report
+
+1.) Problem statement:
+
+	This program demstrates how to use registers and syscalls to print strings.
+	Understanding these concepts will build the foundation for later assignments.
+	Learning sytax and how a language outputs data is paramount to more complex problems.
+
+2.) Approach to solution:
+
+	I started with an example file of MARS source code for outputting a array of Fibonacci numbers.
+	After removing the loops to calculate the numbers, I adjusted the output string to be my name.
+	I also updated the comments to reflect the changes.
+
+3.) Solution description:
+
+	This program creates a string with the label head to be my name.
+	Next the program loads the address of this string into a register.
+	Finally, the print service prints the entire string.
+	There is a blank syscall at the end for clean output.

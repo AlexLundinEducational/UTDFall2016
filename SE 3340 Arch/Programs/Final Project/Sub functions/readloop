@@ -1,0 +1,149 @@
+#####################################
+# Final
+#
+# University of Texas at Dallas
+# CS/CE 3340
+# Fall 2016
+#
+# Alex Lundin
+#
+# Description of file content - 
+#
+# main, read, printnewline, multiplyboth, endloop
+#
+######################################
+
+######################################
+# main 
+#
+# Output
+#
+# Variables
+#
+
+######################################
+
+
+
+
+	.data  
+buffer:
+	.space 34
+instruction:
+	.space 32	
+fileinput: 
+	.asciiz "machinecode.txt"      # filename for input
+fileoutput:
+	.asciiz "assembly.txt"      # filename for input
+newline:
+    	.asciiz "\n"
+#need to be able to hold op plus newline
+data_end:
+#blank for calculating length of string output to text file
+		
+        .text
+main:
+   #file_open:
+    li $v0, 13
+    la $a0, fileoutput
+    li $a1, 9
+    li $a2, 0
+    syscall  # File descriptor gets returned in $v0
+    move $s7, $v0
+  ###############################################################
+  # Open (for reading) a file that does not exist
+  li   $v0, 13       		# system call for open file
+  la   $a0, fileinput     	# output file name
+  li   $a1, 0        		# Open for writing (flags are 0: read, 1: write)
+  li   $a2, 0        		# mode is ignored
+  syscall            		# open a file (file descriptor returned in $v0)
+  move $s6, $v0      		# save the file descriptor 
+  ###############################################################
+
+j readloop
+
+readloop:
+  # Read from file just opened (entire contents to buffer)
+  li   $v0, 14       		# system call for read from file
+  move $a0, $t0      		# file descriptor 
+  la   $a1, buffer   		# address of buffer from which to write
+  li   $a2, 34       		# hardcoded buffer length
+  syscall            		# read from file
+  blez $v0, endreadloop     	# is # of bytes read zero or an error?
+  j write	
+  
+
+    
+
+write:
+	la   $a0, buffer      		# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+      	syscall   		  
+      
+    	  
+     	j  currentinstructionsetup   			# otherwise start currentinstructionsetup again to loop to next instruction	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    
+	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    
+currentinstructionsetup:
+la $s1, buffer
+li $t2, 0      			# $t2 is the counter. set it to 0 
+la $t4, instruction  		# la means load address (so we load the address of opcode into $s1)
+li $t5, 31
+j getInstruction
+
+
+getInstruction:
+beq $t5, $t2  printinstruction 	# if $t1 == $t4 then go to label end (32 bits of file are stored to instruction string)  
+lb $t3, 0($s1)  		# Load the first byte from address in $s1
+beqz $t3, exit   		# if $t3 == 0 then go to label end (end of string) 
+#########################################################
+#http://stackoverflow.com/questions/32819645/printing-the-x-char-in-a-string-mips
+# string traverse based on counter $t2
+######################################################### 
+sb $t3, 0($t4)                  # store current character in the buffer
+addi $t4, $t4, 1               	# same for finalStr pointer  
+add $s1, $s1, 1 		# else increment the address  
+add $t2, $t2, 1 		# and increment the counter of course      	  
+j getInstruction      		# finally loop
+
+	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    
+printinstruction:
+	#la   $a0, instruction      	# load address of print heading
+      	#li   $v0, 4           		# specify Print String service
+	#syscall
+	
+ 	#la   $a0, newline      	# load address of print heading
+      	#li   $v0, 4           		# specify Print String service
+     	#syscall               		# print heading
+
+#file_write:
+    move $v0, $s7	
+    move $a0, $v0  # Syscall 15 requieres file descriptor in $a0
+    li $v0, 15
+    la $a1, instruction
+    la $a2, data_end
+    la $a3, instruction
+    subu $a2, $a2, $a3  # computes the length of the string, this is really a constant 
+    syscall	 
+  #file_close:
+    li $v0, 16  # $a0 already has the file descriptor
+    syscall          	
+     	
+     	
+	move $v0, $s6
+     	j  readloop    		# otherwise start currentinstructionsetup again to loop to next instruction
+     		      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    
+endreadloop:
+  ###############################################################
+  # Close the file 
+  li   $v0, 16       		# system call for close file
+  move $a0, $t0      		# file descriptor to close
+  syscall            		# close file
+  ###############################################################  
+	j exit	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    
+	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	         	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    	      	      	      	    
+  	      	      	      	      	      	    	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	     	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	      	    
+exit:
+    	li      $v0, 10              # terminate program run and
+    	syscall                      # Exit	      	    
+  	      	      	    
+

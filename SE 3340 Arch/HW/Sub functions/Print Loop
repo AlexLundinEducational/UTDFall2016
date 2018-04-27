@@ -1,0 +1,26 @@
+#print loop
+.data
+list: .word 2, 3, 5, 7, 11, 13, 17, 19, 23, 29
+size: .word 10
+
+.text
+main:
+	lw $t3, size
+	la $t1, list # get array address
+	li $t2, 0 # set loop counter
+	
+	
+prnlp:
+	beq $t2, $t3, prndn # check for array end
+	lw $a0, ($t1) # print list element
+	li $v0, 1
+	syscall
+	addi $a0, $0, 0xA #ascii code for LF, if you have any trouble try 0xD for CR. ((http://stackoverflow.com/questions/9875468/printing-newline-in-mips))
+        addi $v0, $0, 0xB #syscall 11 prints the lower 8 bits of $a0 as an ascii character.
+        syscall
+	addi $t2, $t2, 1 # advance loop counter
+	addi $t1, $t1, 4 # advance array pointer
+	b prnlp # repeat the loop
+prndn:	
+	li $v0, 10
+	syscall

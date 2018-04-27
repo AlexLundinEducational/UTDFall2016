@@ -1,0 +1,30 @@
+Alex Lundin
+CS/CE 3340
+Fall 2016
+
+Pgm 3 Report
+
+1.) Problem statement
+
+	This program demstrates how to use registers and syscalls to accumulate values from the user.
+	Understanding how to implement a for loop was cruicial to this assignment.
+	Learning how MIPS handles loops will build a strong foundation for the final project.
+
+2.) Approach to solution
+
+	I started this assignment by learning how to implement a for loop.
+	Next, I set up the structure to iterate based on the input from a user.
+	Finally, I created the peices to multiply and accumulate inputs.
+
+3.) Solution Description
+
+	This program uses labels to split up the basic tasks with jump and link calls to return to main.
+	First, main prompts the user with information for the type of input expected.
+	Next, main calls the read label, with a jump and link instruction, to get the number of pairs from the user.
+	This value is used to establish the maximum number of times the loop for inputing pairs repeates.
+	The link returns to main.
+	After this, the L1 label is called with a jump and link instruction.
+	The L1 label repeates until the counter max is reached.
+	Each iteration accepts to intergers from the user, multiplies them and adds them to the accumulator.
+	Finally, when the max value is reached, EXIT is called.
+	Exit prints more information about the process and outputs the final answer.

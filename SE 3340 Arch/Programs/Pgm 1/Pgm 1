@@ -1,0 +1,35 @@
+#####################################
+# Pgm 1
+#
+# University of Texas at Dallas
+# CS/CE 3340
+# Fall 2016
+#
+# Alex Lundin
+#
+# Description of file content - Print Name with string
+#
+# List of routines
+#
+######################################
+
+######################################
+# main
+#
+# Output string variable head
+#
+# Head holds the string
+#
+######################################
+      .data
+head: .asciiz  "Alex Lundin"
+      .text
+print:
+	la   $a0, head        # load address of print heading
+      li   $v0, 4           # specify Print String service
+      syscall               # print heading
+endloop:
+    li      $v0, 10              # terminate program run and
+    syscall                      # Exit
+
+	

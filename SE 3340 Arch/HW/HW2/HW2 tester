@@ -1,0 +1,48 @@
+	
+#2.3
+.data
+listA: .word 2, 3, 5, 7, 11, 13, 17, 19, 23, 29
+listB: .word 5, 22, 3, 8, 2, 9, 1, 6, 2, 15
+listAddress: .word
+
+.text
+main:
+
+	la $s6, listA 		# get array address
+	la $s7, listB 		# get array address
+	
+	
+	li	$s4, 0		#variable j
+	li	$s3, 3		#variable i
+	sub $t0, $s3, $s4	#i - j
+
+	addi $t1, $s6, 12	#add offset to address of listA then load into $t1
+	lw $t2, 12($s6)
+	
+	lw $a0, ($t1) 		# print list element at $t1 address
+	li $v0, 1
+	syscall
+	
+	
+	addi $a0, $0, 0xA 	#ascii code for LF, if you have any trouble try 0xD for CR. ((http://stackoverflow.com/questions/9875468/printing-newline-in-mips))
+        addi $v0, $0, 0xB 	#syscall 11 prints the lower 8 bits of $a0 as an ascii character.
+        syscall
+
+	addi $t3, $s7, 28	#add offset to address of listB then load into $t3
+	
+	lw $a0, ($t3) 		# print list element
+	li $v0, 1
+	syscall
+	
+	addi $a0, $0, 0xA 	#ascii code for LF, if you have any trouble try 0xD for CR. ((http://stackoverflow.com/questions/9875468/printing-newline-in-mips))
+        addi $v0, $0, 0xB 	#syscall 11 prints the lower 8 bits of $a0 as an ascii character.
+        syscall
+        
+	sw $t2, 28($s7)		# at listB[8] store the value of listA[i-j]
+	
+	lw $a0, ($t3) 		# print new listB element
+	li $v0, 1
+	syscall
+
+	li $v0, 10
+	syscall

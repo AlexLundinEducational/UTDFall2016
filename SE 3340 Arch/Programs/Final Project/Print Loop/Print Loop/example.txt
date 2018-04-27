@@ -1,0 +1,1889 @@
+Writing this to a file.
+func0_string:
+        .asciiz "
+func1_string:
+        .asciiz "
+func2_string:
+        .asciiz "
+func3_string:
+        .asciiz "
+func4_string:
+        .asciiz "
+func5_string:
+        .asciiz "
+func6_string:
+        .asciiz "
+func7_string:
+        .asciiz "
+func8_string:
+        .asciiz "
+func9_string:
+        .asciiz "
+func10_string:
+        .asciiz "
+func11_string:
+        .asciiz "
+func12_string:
+        .asciiz "
+func13_string:
+        .asciiz "
+func14_string:
+        .asciiz "
+func15_string:
+        .asciiz "
+func16_string:
+        .asciiz "
+func17_string:
+        .asciiz "
+func18_string:
+        .asciiz "
+func19_string:
+        .asciiz "
+func20_string:
+        .asciiz "
+func21_string:
+        .asciiz "
+func22_string:
+        .asciiz "
+func23_string:
+        .asciiz "
+func24_string:
+        .asciiz "
+func25_string:
+        .asciiz "
+func26_string:
+        .asciiz "
+func27_string:
+        .asciiz "
+func28_string:
+        .asciiz "
+func29_string:
+        .asciiz "
+func30_string:
+        .asciiz "
+func31_string:
+        .asciiz "
+func32_string:
+        .asciiz "
+func33_string:
+        .asciiz "
+func34_string:
+        .asciiz "
+func35_string:
+        .asciiz "
+func36_string:
+        .asciiz "
+func37_string:
+        .asciiz "
+func38_string:
+        .asciiz "
+func39_string:
+        .asciiz "
+func40_string:
+        .asciiz "
+func41_string:
+        .asciiz "
+func42_string:
+        .asciiz "
+func43_string:
+        .asciiz "
+func44_string:
+        .asciiz "
+func45_string:
+        .asciiz "
+func46_string:
+        .asciiz "
+func47_string:
+        .asciiz "
+func48_string:
+        .asciiz "
+func49_string:
+        .asciiz "
+func50_string:
+        .asciiz "
+func51_string:
+        .asciiz "
+func52_string:
+        .asciiz "
+func53_string:
+        .asciiz "
+func54_string:
+        .asciiz "
+func55_string:
+        .asciiz "
+func56_string:
+        .asciiz "
+func57_string:
+        .asciiz "
+func58_string:
+        .asciiz "
+func59_string:
+        .asciiz "
+func60_string:
+        .asciiz "
+func61_string:
+        .asciiz "
+func62_string:
+        .asciiz "
+func63_string:
+        .asciiz "
+function0:
+        j func0
+function1:
+        j func1
+function2:
+        j func2
+function3:
+        j func3
+function4:
+        j func4
+function5:
+        j func5
+function6:
+        j func6
+function7:
+        j func7
+function8:
+        j func8
+function9:
+        j func9
+function10:
+        j func10
+function11:
+        j func11
+function12:
+        j func12
+function13:
+        j func13
+function14:
+        j func14
+function15:
+        j func15
+function16:
+        j func16
+function17:
+        j func17
+function18:
+        j func18
+function19:
+        j func19
+function20:
+        j func20
+function21:
+        j func21
+function22:
+        j func22
+function23:
+        j func23
+function24:
+        j func24
+function25:
+        j func25
+function26:
+        j func26
+function27:
+        j func27
+function28:
+        j func28
+function29:
+        j func29
+function30:
+        j func30
+function31:
+        j func31
+function32:
+        j func32
+function33:
+        j func33
+function34:
+        j func34
+function35:
+        j func35
+function36:
+        j func36
+function37:
+        j func37
+function38:
+        j func38
+function39:
+        j func39
+function40:
+        j func40
+function41:
+        j func41
+function42:
+        j func42
+function43:
+        j func43
+function44:
+        j func44
+function45:
+        j func45
+function46:
+        j func46
+function47:
+        j func47
+function48:
+        j func48
+function49:
+        j func49
+function50:
+        j func50
+function51:
+        j func51
+function52:
+        j func52
+function53:
+        j func53
+function54:
+        j func54
+function55:
+        j func55
+function56:
+        j func56
+function57:
+        j func57
+function58:
+        j func58
+function59:
+        j func59
+function60:
+        j func60
+function61:
+        j func61
+function62:
+        j func62
+function63:
+        j func63
+func0:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func0_string
+    	jr $ra
+func1:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func1_string
+    	jr $ra
+func2:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func2_string
+    	jr $ra
+func3:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func3_string
+    	jr $ra
+func4:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func4_string
+    	jr $ra
+func5:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func5_string
+    	jr $ra
+func6:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func6_string
+    	jr $ra
+func7:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func7_string
+    	jr $ra
+func8:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func8_string
+    	jr $ra
+func9:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func9_string
+    	jr $ra
+func10:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func10_string
+    	jr $ra
+func11:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func11_string
+    	jr $ra
+func12:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func12_string
+    	jr $ra
+func13:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func13_string
+    	jr $ra
+func14:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func14_string
+    	jr $ra
+func15:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func15_string
+    	jr $ra
+func16:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func16_string
+    	jr $ra
+func17:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func17_string
+    	jr $ra
+func18:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func18_string
+    	jr $ra
+func19:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func19_string
+    	jr $ra
+func20:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func20_string
+    	jr $ra
+func21:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func21_string
+    	jr $ra
+func22:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func22_string
+    	jr $ra
+func23:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func23_string
+    	jr $ra
+func24:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func24_string
+    	jr $ra
+func25:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func25_string
+    	jr $ra
+func26:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func26_string
+    	jr $ra
+func27:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func27_string
+    	jr $ra
+func28:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func28_string
+    	jr $ra
+func29:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func29_string
+    	jr $ra
+func30:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func30_string
+    	jr $ra
+func31:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func31_string
+    	jr $ra
+func32:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func32_string
+    	jr $ra
+func33:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func33_string
+    	jr $ra
+func34:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func34_string
+    	jr $ra
+func35:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func35_string
+    	jr $ra
+func36:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func36_string
+    	jr $ra
+func37:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func37_string
+    	jr $ra
+func38:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func38_string
+    	jr $ra
+func39:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func39_string
+    	jr $ra
+func40:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func40_string
+    	jr $ra
+func41:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func41_string
+    	jr $ra
+func42:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func42_string
+    	jr $ra
+func43:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func43_string
+    	jr $ra
+func44:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func44_string
+    	jr $ra
+func45:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func45_string
+    	jr $ra
+func46:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func46_string
+    	jr $ra
+func47:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func47_string
+    	jr $ra
+func48:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func48_string
+    	jr $ra
+func49:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func49_string
+    	jr $ra
+func50:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func50_string
+    	jr $ra
+func51:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func51_string
+    	jr $ra
+func52:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func52_string
+    	jr $ra
+func53:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func53_string
+    	jr $ra
+func54:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func54_string
+    	jr $ra
+func55:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func55_string
+    	jr $ra
+func56:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func56_string
+    	jr $ra
+func57:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func57_string
+    	jr $ra
+func58:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func58_string
+    	jr $ra
+func59:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func59_string
+    	jr $ra
+func60:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func60_string
+    	jr $ra
+func61:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func61_string
+    	jr $ra
+func62:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func62_string
+    	jr $ra
+func63:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,func63_string
+    	jr $ra
+opcode0_string:
+        .asciiz
+opcode1_string:
+        .asciiz
+opcode2_string:
+        .asciiz
+opcode3_string:
+        .asciiz
+opcode4_string:
+        .asciiz
+opcode5_string:
+        .asciiz
+opcode6_string:
+        .asciiz
+opcode7_string:
+        .asciiz
+opcode8_string:
+        .asciiz
+opcode9_string:
+        .asciiz
+opcode10_string:
+        .asciiz
+opcode11_string:
+        .asciiz
+opcode12_string:
+        .asciiz
+opcode13_string:
+        .asciiz
+opcode14_string:
+        .asciiz
+opcode15_string:
+        .asciiz
+opcode16_string:
+        .asciiz
+opcode17_string:
+        .asciiz
+opcode18_string:
+        .asciiz
+opcode19_string:
+        .asciiz
+opcode20_string:
+        .asciiz
+opcode21_string:
+        .asciiz
+opcode22_string:
+        .asciiz
+opcode23_string:
+        .asciiz
+opcode24_string:
+        .asciiz
+opcode25_string:
+        .asciiz
+opcode26_string:
+        .asciiz
+opcode27_string:
+        .asciiz
+opcode28_string:
+        .asciiz
+opcode29_string:
+        .asciiz
+opcode30_string:
+        .asciiz
+opcode31_string:
+        .asciiz
+opcode32_string:
+        .asciiz
+opcode33_string:
+        .asciiz
+opcode34_string:
+        .asciiz
+opcode35_string:
+        .asciiz
+opcode36_string:
+        .asciiz
+opcode37_string:
+        .asciiz
+opcode38_string:
+        .asciiz
+opcode39_string:
+        .asciiz
+opcode40_string:
+        .asciiz
+opcode41_string:
+        .asciiz
+opcode42_string:
+        .asciiz
+opcode43_string:
+        .asciiz
+opcode44_string:
+        .asciiz
+opcode45_string:
+        .asciiz
+opcode46_string:
+        .asciiz
+opcode47_string:
+        .asciiz
+opcode48_string:
+        .asciiz
+opcode49_string:
+        .asciiz
+opcode50_string:
+        .asciiz
+opcode51_string:
+        .asciiz
+opcode52_string:
+        .asciiz
+opcode53_string:
+        .asciiz
+opcode54_string:
+        .asciiz
+opcode55_string:
+        .asciiz
+opcode56_string:
+        .asciiz
+opcode57_string:
+        .asciiz
+opcode58_string:
+        .asciiz
+opcode59_string:
+        .asciiz
+opcode60_string:
+        .asciiz
+opcode61_string:
+        .asciiz
+opcode62_string:
+        .asciiz
+opcode63_string:
+        .asciiz
+label0:
+        j opcode0
+label1:
+        j opcode1
+label2:
+        j opcode2
+label3:
+        j opcode3
+label4:
+        j opcode4
+label5:
+        j opcode5
+label6:
+        j opcode6
+label7:
+        j opcode7
+label8:
+        j opcode8
+label9:
+        j opcode9
+label10:
+        j opcode10
+label11:
+        j opcode11
+label12:
+        j opcode12
+label13:
+        j opcode13
+label14:
+        j opcode14
+label15:
+        j opcode15
+label16:
+        j opcode16
+label17:
+        j opcode17
+label18:
+        j opcode18
+label19:
+        j opcode19
+label20:
+        j opcode20
+label21:
+        j opcode21
+label22:
+        j opcode22
+label23:
+        j opcode23
+label24:
+        j opcode24
+label25:
+        j opcode25
+label26:
+        j opcode26
+label27:
+        j opcode27
+label28:
+        j opcode28
+label29:
+        j opcode29
+label30:
+        j opcode30
+label31:
+        j opcode31
+label32:
+        j opcode32
+label33:
+        j opcode33
+label34:
+        j opcode34
+label35:
+        j opcode35
+label36:
+        j opcode36
+label37:
+        j opcode37
+label38:
+        j opcode38
+label39:
+        j opcode39
+label40:
+        j opcode40
+label41:
+        j opcode41
+label42:
+        j opcode42
+label43:
+        j opcode43
+label44:
+        j opcode44
+label45:
+        j opcode45
+label46:
+        j opcode46
+label47:
+        j opcode47
+label48:
+        j opcode48
+label49:
+        j opcode49
+label50:
+        j opcode50
+label51:
+        j opcode51
+label52:
+        j opcode52
+label53:
+        j opcode53
+label54:
+        j opcode54
+label55:
+        j opcode55
+label56:
+        j opcode56
+label57:
+        j opcode57
+label58:
+        j opcode58
+label59:
+        j opcode59
+label60:
+        j opcode60
+label61:
+        j opcode61
+label62:
+        j opcode62
+label63:
+        j opcode63
+opcode0:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode0_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode1:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode1_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode2:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode2_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode3:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode3_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode4:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode4_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode5:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode5_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode6:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode6_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode7:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode7_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode8:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode8_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode9:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode9_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode10:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode10_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode11:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode11_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode12:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode12_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode13:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode13_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode14:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode14_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode15:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode15_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode16:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode16_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode17:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode17_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode18:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode18_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode19:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode19_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode20:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode20_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode21:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode21_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode22:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode22_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode23:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode23_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode24:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode24_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode25:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode25_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode26:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode26_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode27:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode27_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode28:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode28_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode29:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode29_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode30:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode30_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode31:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode31_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode32:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode32_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode33:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode33_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode34:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode34_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode35:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode35_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode36:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode36_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode37:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode37_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode38:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode38_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode39:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode39_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode40:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode40_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode41:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode41_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode42:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode42_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode43:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode43_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode44:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode44_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode45:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode45_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode46:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode46_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode47:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode47_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode48:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode48_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode49:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode49_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode50:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode50_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode51:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode51_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode52:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode52_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode53:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode53_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode54:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode54_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode55:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode55_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode56:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode56_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode57:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode57_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode58:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode58_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode59:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode59_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode60:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode60_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode61:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode61_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode62:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode62_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+opcode63:
+        ###this happens for any opcode above, write specific string and blankspace
+        jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,opcode63_string
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,blankspace
+    	jal     fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	jal     oclose
+    	j       rtype
+r0_string:
+        .asciiz
+r1_string:
+        .asciiz
+r2_string:
+        .asciiz
+r3_string:
+        .asciiz
+r4_string:
+        .asciiz
+r5_string:
+        .asciiz
+r6_string:
+        .asciiz
+r7_string:
+        .asciiz
+r8_string:
+        .asciiz
+r9_string:
+        .asciiz
+r10_string:
+        .asciiz
+r11_string:
+        .asciiz
+r12_string:
+        .asciiz
+r13_string:
+        .asciiz
+r14_string:
+        .asciiz
+r15_string:
+        .asciiz
+r16_string:
+        .asciiz
+r17_string:
+        .asciiz
+r18_string:
+        .asciiz
+r19_string:
+        .asciiz
+r20_string:
+        .asciiz
+r21_string:
+        .asciiz
+r22_string:
+        .asciiz
+r23_string:
+        .asciiz
+r24_string:
+        .asciiz
+r25_string:
+        .asciiz
+r26_string:
+        .asciiz
+r27_string:
+        .asciiz
+r28_string:
+        .asciiz
+r29_string:
+        .asciiz
+r30_string:
+        .asciiz
+r31_string:
+        .asciiz
+register0:
+        j r0
+register1:
+        j r1
+register2:
+        j r2
+register3:
+        j r3
+register4:
+        j r4
+register5:
+        j r5
+register6:
+        j r6
+register7:
+        j r7
+register8:
+        j r8
+register9:
+        j r9
+register10:
+        j r10
+register11:
+        j r11
+register12:
+        j r12
+register13:
+        j r13
+register14:
+        j r14
+register15:
+        j r15
+register16:
+        j r16
+register17:
+        j r17
+register18:
+        j r18
+register19:
+        j r19
+register20:
+        j r20
+register21:
+        j r21
+register22:
+        j r22
+register23:
+        j r23
+register24:
+        j r24
+register25:
+        j r25
+register26:
+        j r26
+register27:
+        j r27
+register28:
+        j r28
+register29:
+        j r29
+register30:
+        j r30
+register31:
+        j r31
+r0:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r0_string
+    	jr $ra
+r1:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r1_string
+    	jr $ra
+r2:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r2_string
+    	jr $ra
+r3:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r3_string
+    	jr $ra
+r4:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r4_string
+    	jr $ra
+r5:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r5_string
+    	jr $ra
+r6:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r6_string
+    	jr $ra
+r7:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r7_string
+    	jr $ra
+r8:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r8_string
+    	jr $ra
+r9:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r9_string
+    	jr $ra
+r10:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r10_string
+    	jr $ra
+r11:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r11_string
+    	jr $ra
+r12:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r12_string
+    	jr $ra
+r13:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r13_string
+    	jr $ra
+r14:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r14_string
+    	jr $ra
+r15:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r15_string
+    	jr $ra
+r16:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r16_string
+    	jr $ra
+r17:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r17_string
+    	jr $ra
+r18:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r18_string
+    	jr $ra
+r19:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r19_string
+    	jr $ra
+r20:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r20_string
+    	jr $ra
+r21:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r21_string
+    	jr $ra
+r22:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r22_string
+    	jr $ra
+r23:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r23_string
+    	jr $ra
+r24:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r24_string
+    	jr $ra
+r25:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r25_string
+    	jr $ra
+r26:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r26_string
+    	jr $ra
+r27:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r27_string
+    	jr $ra
+r28:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r28_string
+    	jr $ra
+r29:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r29_string
+    	jr $ra
+r30:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r30_string
+    	jr $ra
+r31:
+#load $a1 for fputs
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1,r31_string
+    	jr $ra

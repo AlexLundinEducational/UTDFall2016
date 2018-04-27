@@ -1,0 +1,67 @@
+# Pgm
+#
+# University of Texas at Dallas
+# CS/CE 3340
+# Fall 2016
+#
+# Alex Lundin
+#
+# Description of file content - XXXXXX
+#
+# List of routines
+#
+######################################
+
+######################################
+# main
+#
+# Output -
+#
+# Variable descriptions -
+#
+######################################
+
+.data
+Array: .word 0,0,0,0,0,2,4,3,6,1
+size: .word 10
+
+
+.text
+main:
+    la  $t0, Array      # Copy the base address of your array into $t1
+    add $t0, $t0, 40    # 4 bytes per int * 10 ints = 40 bytes                              
+outterLoop:             # Used to determine when we are done iterating over the Array
+    add $t1, $0, $0     # $t1 holds a flag to determine when the list is sorted
+    la  $a0, Array      # Set $a0 to the base address of the Array
+innerLoop:                  # The inner loop will iterate over the Array checking if a swap is needed
+    lw  $t2, 0($a0)         # sets $t0 to the current element in array
+    lw  $t3, 4($a0)         # sets $t1 to the next element in array
+    slt $t5, $t2, $t3       # $t5 = 1 if $t0 < $t1
+    beq $t5, $0, continue   # if $t5 = 1, then swap them
+    add $t1, $0, 1          # if we need to swap, we need to check the list again
+    sw  $t2, 4($a0)         # store the greater numbers contents in the higher position in array (swap)
+    sw  $t3, 0($a0)         # store the lesser numbers contents in the lower position in array (swap)
+continue:
+    addi $a0, $a0, 4            # advance the array to start at the next location from last time
+    bne  $a0, $t0, innerLoop    # If $a0 != the end of Array, jump back to innerLoop
+    bne  $t1, $0, outterLoop    # $t1 = 1, another pass is needed, jump back to outterLoo
+    
+printermain:
+	lw $s3, size
+	la $s1, Array # get array address
+	li $s2, 0 	# set loop counter                
+                        
+prnlp:
+	beq $s2, $s3, prndn # check for array end
+	lw $a0, ($s1) # print list element
+	li $v0, 1
+	syscall
+	addi $a0, $0, 0xA #ascii code for LF, if you have any trouble try 0xD for CR. ((http://stackoverflow.com/questions/9875468/printing-newline-in-mips))
+        addi $v0, $0, 0xB #syscall 11 prints the lower 8 bits of $a0 as an ascii character.
+        syscall
+	addi $s2, $s2, 1 # advance loop counter
+	addi $s1, $s1, 4 # advance array pointer
+	b prnlp # repeat the loop
+prndn:	
+	li $v0, 10
+	syscall    

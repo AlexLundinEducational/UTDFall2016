@@ -1,0 +1,126 @@
+#####################################
+# Pgm 3
+#
+# University of Texas at Dallas
+# CS/CE 3340
+# Fall 2016
+#
+# Alex Lundin
+#
+# Description of file content - 
+# this program askes user for the number of pairs to multiply then accumulate at the end.
+# after the total number of pairs is entered, the user must enter each number for the set of pairs.
+# finally the program outputs the accumulated value.
+#
+# List of routines
+#
+######################################
+
+######################################
+# main
+#
+# Output - 
+# nothing
+#
+# Variable descriptions - 
+# $t2 holds number of pairs, this is used for the loop max value
+#
+# L1
+#
+# Output - 
+# accumulated values stored in $s3
+#
+# Variable descriptions -
+# $t1 is loop counter
+# $t2 is loop max value
+# $s0 and $s1 store the pair of numbers entered each iteration
+# $s2 holds the multiplication of the pairs, no overflow handling
+# $s3 holds the accumulation of the multiplied pairs
+#
+# read
+#
+# Output -
+# nothing
+#
+# Variable descriptions -
+# $v0 holds number of pairs entered by user
+#
+# EXIT
+#
+# Output -
+# informationg about the programs calculations and the final accumulated value
+#
+# Variable descriptions -
+#
+######################################
+
+      .data
+start: .asciiz  "Enter the number of pairs, as a integer, to multiply individually and then sum at the end."
+pair: .asciiz  "Enter each number, as a integer, for the pair."
+info: .asciiz  "This function accepted a certain number of pairs from the user. Next it multiplied each pair individually. Finally, it accumulated the results by summation. The answer is: "
+
+
+      .text
+main:
+
+	la   $a0, start        		# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+      	syscall               		# print heading
+      	
+	jal read 			# jump and link to read label
+	move $t2,$v0			# copy valued entered by user from $v0 to $t2	 
+	
+	     				# print new line block
+      	addi $a0, $0, 0xA 		# ascii code for LF, if you have any trouble try 0xD for CR. ((http://stackoverflow.com/questions/9875468/printing-newline-in-mips))
+        addi $v0, $0, 0xB 		# syscall 11 prints the lower 8 bits of $a0 as an ascii character.
+        syscall
+        
+	jal L1 
+read:
+	li $v0,5			# load immediate value 5 into register $v0
+	syscall				# syscall on $v0 for reading input from user
+	
+
+        
+	jr $ra	  			# return to $ra
+    
+L1:   	
+	bge  $t1, $t2, EXIT   		# branch if ! ( i < k )
+	
+	la   $a0, pair        		# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+      	syscall               		# print heading
+      	
+      					# print new line block
+      	addi $a0, $0, 0xA 		# ascii code for LF, if you have any trouble try 0xD for CR. ((http://stackoverflow.com/questions/9875468/printing-newline-in-mips))
+        addi $v0, $0, 0xB 		# syscall 11 prints the lower 8 bits of $a0 as an ascii character.
+        syscall
+
+	li $v0,5			# load immediate value 5 into register $v0
+	syscall				# syscall on $v0 for reading input from user	
+	move $s0,$v0			# copy valued entered by user from $v0 to $s0
+
+	li $v0,5			# load immediate value 5 into register $v0
+	syscall				# syscall on $v0 for reading input from user	
+	move $s1,$v0			# copy valued entered by user from $v0 to $s1		
+	
+	mul $s2, $s1, $s0		# multiply $s1 and $s0 then store in $s2
+	
+	add $s3, $s2, $s3		# accumulator
+	
+      	addi $t3, $t3, 1      		# k++
+      	add  $t1, $t1, 1    		# i = i * 2 
+     	j    L1               		# jump back to top of loop 
+EXIT:
+
+	la   $a0, info        		# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+      	syscall               		# print heading
+
+      	      	
+	li $v0, 1        		# system call code for print_int
+	move $a0,$s3			# copy value in $t0 to $a0 for print function
+        syscall          		# print it
+        
+	li      $v0, 10              	# terminate program run
+    	syscall 

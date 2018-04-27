@@ -1,0 +1,139 @@
+
+.data
+itoabuffer:
+	.space 2000
+itoafinal:
+	.space 2000
+	
+fileoutput:
+	.asciiz "assembly.txt"      	# filename for input
+.text
+main:
+	li $t7, 550
+	jal itoa
+	#jal print
+	j  print
+	
+	jal owrite
+    	move    $v0,$s6                 # set the file descriptor for fput prologue
+    	la      $a1, itoafinal
+    	jal     fputs
+     	move    $v0,$s6                 # set the file descriptor
+    	jal oclose	
+	
+	j exit
+	
+
+### 	itoa, read number from register and convert to string for writing to file later
+#
+#  	prologue for itoa
+#	$t7, number to convert, works well with binarytodecimal
+#	epilogue for itoa	
+#	itoafinal has final string	
+itoa:	
+	# number in $t7	 
+	addi $t1,$t7, 0   		# t1=$t7
+	addi $t0,$zero,10 		# t0=10
+	la $t4, itoabuffer		# load starting addresses of buffers 
+	la $t7, itoafinal  
+	li $t3, 0
+	j loop
+	 
+loop:
+	div $t1,$t0    			#t1/10
+	mflo $t1      			#t1 = quotient
+	mfhi $t2      			#t2 =remainder
+	addi $t2,$t2,48 		#Convert to ASCII
+	sb $t2,($t4)	 		#Push t2 into $t4
+	add $t3,$t3,1 			#counter
+	add $t4,$t4,1 			#address of buffer
+	bne $t1,$zero,loop 		#If t1<>0 go to Loop
+	li $t5, 0
+	add $t4,$t4,-1 			# move back one from null terminator that is added before storing items to next buffer
+	j  order
+		  
+order:	  
+	lb $t1,($t4) 			# pop the last byte from $t4
+	sb $t1,($t7) 			# savebyte to the proper location of memory onto new buffer
+	add $t7, $t7, 1   		# address of buffer 2
+	add $t5, $t5, 1			# counter 2	
+	add $t4, $t4, -1		# address of buffer 1, moving backwards from where we left off at null terminator
+	bne $t3,$t5,order 		#If t0<>0 go to order, ends when counter2 reaches counter 1  
+       	jr $ra
+                       		
+ printbuffer:
+ 	#la   $a0, itoabuffer     	# load address of print heading
+      	#li   $v0, 1          		# specify Print String service
+	#syscall
+	la   $a0, itoabuffer     	# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+	syscall     		
+ print:
+ 	la   $a0, itoafinal     	# load address of print heading
+      	li   $v0, 4           		# specify Print String service
+	syscall
+	
+exit:
+   li $v0, 10       		# exit system call
+   syscall
+   
+   
+   
+# fputs -- output string to file
+#
+# prologue to fputs
+# arguments:
+#   must be set during prologue to function
+#   a1 -- buffer address
+#   s6 -- file descriptor
+#
+# registers:
+#   handled by fputs_loop
+#   t0 -- current buffer char
+#   a2 -- buffer length
+fputs:
+    move    $a2,$a1                 	# get buffer address
+
+fputs_loop:
+    lb      $t0,0($a2)              	# get next character -- is it EOS?
+    addiu   $a2,$a2,1               	# pre-increment pointer
+    bnez    $t0,fputs_loop          	# no, loop
+
+    subu    $a2,$a2,$a1             	# get strlen + 1
+    subiu   $a2,$a2,1               	# compensate for pre-increment
+
+    move    $a0,$s6                 	# get file descriptor
+    li      $v0,15                  	# syscall for write to file
+    syscall
+    jr $ra              		# return 
+    
+       
+          # owrite -- Open (for writing) a file that exists
+#
+# prologue to oclose
+# nothing needed, output file is coded into this
+owrite:	                             
+    li      $v0,13                  # system call for open file
+    la      $a0,fileoutput          # output file name
+    li      $a1,9                   # Open for writing (flags are 0: read, 1: write)
+    li      $a2,0                   # modeA is ignored
+    syscall                         # open a file (file descriptor returned in $v0)
+    move    $s6,$v0                 # save the file descriptor
+    jr $ra              	    # return   
+    
+
+
+        
+# oclose -- close any output file
+#
+# prologue to oclose
+# arguments:
+#   must be set during prologue to function
+#   s6 -- file descriptor     
+oclose:
+    ###############################################################
+    # Close the file
+    li      $v0,16                  # system call for close file
+    move    $a0,$s6                 # file descriptor to close
+    syscall                         # close
+    jr $ra              		# return    

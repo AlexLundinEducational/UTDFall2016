@@ -1,0 +1,91 @@
+#####################################
+# Pgm 4
+#
+# University of Texas at Dallas
+# CS/CE 3340
+# Fall 2016
+#
+# Alex Lundin
+#
+# Description of file content - 
+# this program askes user for the number of pairs to multiply then accumulate at the end.
+# after the total number of pairs is entered, the user must enter each number for the set of pairs.
+# these pairs are stored onto the stack, in two seperate arrays starting at different addresses.
+# the program pulls each item back off the stack during the multiply loop.
+# finally the program outputs the accumulated value.
+#
+# List of routines
+#
+######################################
+
+######################################
+# main
+#
+# Output - 
+# nothing
+#
+# Variable descriptions - 
+# $t2 holds number of pairs, this is used for the loop max value
+# $t4 holds the size of each array in bytes
+# $s4 and $s5 hold the addresses for each array
+#
+# L1
+# first loop, retrun to main (stored in $ra) after loop completes
+# Output - 
+# accumulated values stored in $s3
+#
+# Variable descriptions -
+# $t1 is loop counter
+# $t2 is loop max value
+# $s0 and $s1 store the pair of numbers entered each iteration and are stored to the stack
+# $t4 holds the size of each array in bytes
+# $s4 and $s5 hold the addresses for each array
+#
+# SUMPRODUCT
+#
+# Output - 
+# accumulated values stored in $s3
+#
+# Variable descriptions -
+# $t5 is loop counter
+# $t2 is loop max value
+# $s0 and $s1 store the pair of numbers pulled off the stack
+# $s2 holds the multiplication of the pairs, no overflow handling
+# $s3 holds the accumulation of the multiplied pairs
+#
+# read
+#
+# Output -
+# nothing
+#
+# Variable descriptions -
+# $v0 holds number of pairs entered by user
+#
+# EXIT
+#
+# Output -
+# informationg about the programs calculations and the final accumulated value
+#
+# Variable descriptions -
+#
+######################################
+
+      .data
+start: .asciiz  "Enter the number of pairs, as a integer, to multiply individually and then sum at the end."
+pair: .asciiz  "Enter each number, as a integer, for the pair."
+info: .asciiz  "This function accepted pairs from the user. Next it placed them on the stack. Then it pulled them from the stack and multiplied each pair individually." 
+info2: .asciiz  "Finally, it accumulated the results by summation. The answer is: "
+
+      .text
+main:
+
+	sub $sp, $sp, $t4		# move stack pointer to array B
+	add $sp, $sp, $t4
+	bne $sp, $sp, main
+	addi $sp, $sp, -6
+	addi $sp, $sp, 6
+
+
+
+
+
